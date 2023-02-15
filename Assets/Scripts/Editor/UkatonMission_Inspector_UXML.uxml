@@ -14,4 +14,5 @@
     <uie:PropertyField binding-path="pressureDataEvents" label="Pressure Data" name="pressureDataEventsElement" />
     <ui:Label text="Debugging" display-tooltip-when-elided="true" style="-unity-font-style: bold; padding-top: 10px;" />
     <ui:Toggle label="Enable Logging? " binding-path="enableLogging" />
+    <uie:PropertyField label="loggerText" binding-path="loggerText" />
 </ui:UXML>

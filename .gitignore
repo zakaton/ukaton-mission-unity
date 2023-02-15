@@ -75,6 +75,8 @@ crashlytics-build.properties
 /[Aa]ssets/Plugins*
 /[Aa]ssets/Shatalmic*
 /[Aa]ssets/XR*
+/[Aa]ssets/TextMesh Pro*
+build*
 
 /[Pp]rojectSettings/
 

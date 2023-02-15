@@ -6,11 +6,14 @@ using System.Buffers.Binary;
 
 /*
   TODO
-    test pressure
+    fix working on quest
+    include models
 */
 
 public class UkatonMission : MonoBehaviour
 {
+  public TMPro.TMP_Text loggerText;
+
   public enum DeviceType { motionModule, leftInsole, rightInsole };
   public enum InsoleSide { left, right }
   public enum SensorType { motion, pressure };
@@ -158,9 +161,6 @@ public class UkatonMission : MonoBehaviour
   }
   public PressureDataEvents pressureDataEvents;
 
-  [SerializeField]
-  public UnityEvent onAccelerationData;
-
   static private string GENERATE_UUID(string value)
   {
     return String.Format("5691eddf-{0}-4420-b7a5-bb8751ab5181", value);
@@ -203,6 +203,10 @@ public class UkatonMission : MonoBehaviour
     set
     {
       logger.Log(value);
+      if (loggerText)
+      {
+        loggerText.text = value;
+      }
       //BluetoothLEHardwareInterface.Log(value);
     }
   }
@@ -247,15 +251,27 @@ public class UkatonMission : MonoBehaviour
 
     connectionEvents.onConnecting.Invoke();
 
+    StatusMessage = "A";
     Reset();
-    BluetoothLEHardwareInterface.Initialize(true, false, () =>
-    {
-      SetState(States.Scan, 0.1f);
+    StatusMessage = "B";
 
-    }, (error) =>
+    try
     {
-      StatusMessage = "Error during initialize: " + error;
-    });
+
+      BluetoothLEHardwareInterface.Initialize(true, false, () =>
+      {
+        StatusMessage = "C";
+        SetState(States.Scan, 0.1f);
+        StatusMessage = "C";
+      }, (error) =>
+      {
+        StatusMessage = "Error during initialize: " + error;
+      });
+    }
+    catch (Exception e)
+    {
+      StatusMessage = e.Message;
+    }
   }
 
   private List<byte> CreateSensorConfiguration()
@@ -359,7 +375,7 @@ public class UkatonMission : MonoBehaviour
 
   public class PressureData
   {
-    public double[] pressure;
+    public double[] pressure = new double[numberOfPressureSensors];
     public Vector2 centerOfMass;
     public double mass;
     public double sum;
@@ -431,7 +447,7 @@ public class UkatonMission : MonoBehaviour
 
   private void ProcessSensorData(byte[] bytes)
   {
-    logger.Log("received sensor data!");
+    logger.Log(String.Format("received {0} bytes", bytes.Length));
     int byteOffset = 0;
 
     UInt16 timestamp = ToUInt16(bytes, byteOffset);
@@ -486,7 +502,8 @@ public class UkatonMission : MonoBehaviour
           while (byteOffset < finalByteOffset)
           {
             PressureDataType pressureDataType = (PressureDataType)bytes[byteOffset++];
-            double scalar = PressureDataScalars[pressureDataType];
+            logger.Log(pressureDataType.ToString());
+            double scalar = PressureDataScalars.ContainsKey(pressureDataType) ? PressureDataScalars[pressureDataType] : 1;
             switch (pressureDataType)
             {
               case PressureDataType.singleByte:
@@ -497,31 +514,35 @@ public class UkatonMission : MonoBehaviour
                   double value = 0;
                   if (pressureDataType == PressureDataType.singleByte)
                   {
-                    value = ToUInt16(bytes, byteOffset);
-                    byteOffset += 2;
+                    value = bytes[byteOffset++];
                   }
                   else
                   {
-                    value = bytes[byteOffset++];
+                    value = ToUInt16(bytes, byteOffset);
+                    byteOffset += 2;
                   }
                   pressureData.pressure[i] = value;
                   pressureData.sum += value;
                 }
 
                 pressureData.centerOfMass.Set(0, 0);
-                for (int i = 0; i < PressureData.numberOfPressureSensors; i++)
+                pressureData.heelToToe = 0;
+                if (pressureData.sum > 0)
                 {
-                  double value = pressureData.pressure[i];
-                  double[] pressurePosition = GetPressurePosition(i);
-                  double weight = value / pressureData.sum;
-                  if (Double.IsInfinity(weight))
+                  for (int i = 0; i < PressureData.numberOfPressureSensors; i++)
                   {
-                    weight = 0;
+                    double value = pressureData.pressure[i];
+                    double[] pressurePosition = GetPressurePosition(i);
+                    double weight = value / pressureData.sum;
+                    if (Double.IsInfinity(weight))
+                    {
+                      weight = 0;
+                    }
+                    pressureData.centerOfMass.x += (float)(weight * pressurePosition[0]);
+                    pressureData.centerOfMass.y += (float)(weight * pressurePosition[1]);
                   }
-                  pressureData.centerOfMass.x += (float)(weight * pressurePosition[0]);
-                  pressureData.centerOfMass.y += (float)(weight * pressurePosition[1]);
+                  pressureData.heelToToe = 1 - pressureData.centerOfMass.y;
                 }
-                pressureData.heelToToe = 1 - pressureData.centerOfMass.y;
 
                 for (int i = 0; i < PressureData.numberOfPressureSensors; i++)
                 {
@@ -537,16 +558,19 @@ public class UkatonMission : MonoBehaviour
               case PressureDataType.centerOfMass:
                 pressureData.centerOfMass.Set(ToSingle(bytes, byteOffset), ToSingle(bytes, byteOffset + 4));
                 byteOffset += 4 * 2;
+                logger.Log(pressureData.centerOfMass);
                 pressureDataEvents.centerOfMass.Invoke();
                 break;
               case PressureDataType.mass:
                 pressureData.mass = ToUInt32(bytes, byteOffset) * scalar;
                 byteOffset += 4;
+                logger.Log(pressureData.mass);
                 pressureDataEvents.mass.Invoke();
                 break;
               case PressureDataType.heelToToe:
                 pressureData.heelToToe = 1 - ToDouble(bytes, byteOffset);
                 byteOffset += 8;
+                logger.Log(pressureData.heelToToe);
                 pressureDataEvents.heelToToe.Invoke();
                 break;
               default:
