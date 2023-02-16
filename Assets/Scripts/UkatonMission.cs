@@ -4,11 +4,6 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Buffers.Binary;
 
-/*
-  TODO
-    fix quaternion
-*/
-
 public class UkatonMission : MonoBehaviour
 {
   public TMPro.TMP_Text loggerText;
