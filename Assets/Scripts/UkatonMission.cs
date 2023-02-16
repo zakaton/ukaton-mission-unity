@@ -351,7 +351,7 @@ public class UkatonMission : MonoBehaviour
     insoleCorrectionQuaternions[InsoleSide.right] = Quaternion.Euler(0, (float)Math.PI / 2 * Mathf.Rad2Deg, (float)-Math.PI / 2 * Mathf.Rad2Deg);
     insoleCorrectionQuaternions[InsoleSide.left] = Quaternion.Euler(0, (float)Math.PI / 2 * Mathf.Rad2Deg, (float)-Math.PI / 2 * Mathf.Rad2Deg);
     insoleCorrectionQuaternions[InsoleSide.left] *= Quaternion.Euler(0, (float)Math.PI * Mathf.Rad2Deg, 0);
-    insoleCorrectionQuaternions[InsoleSide.left] *= Quaternion.Euler((float)-Math.PI / 2 * Mathf.Rad2Deg, 0, 0);
+    insoleCorrectionQuaternions[InsoleSide.left] *= Quaternion.Euler((float)Math.PI / 2 * Mathf.Rad2Deg, 0, 0);
 
     correctionQuaternions[DeviceType.motionModule] = Quaternion.Euler(0, 0, 0);
     correctionQuaternions[DeviceType.rightInsole] = Quaternion.Euler(0, (float)Math.PI * Mathf.Rad2Deg, 0);

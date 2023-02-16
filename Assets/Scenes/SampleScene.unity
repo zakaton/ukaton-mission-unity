@@ -314,9 +314,9 @@ MonoBehaviour:
     linearAcceleration: 0
     rotation: 0
     magnetometer: 0
-    quaternion: 100
+    quaternion: 20
   pressureSensorDataRates:
-    singleByte: 0
+    singleByte: 20
     doubleByte: 0
     centerOfMass: 0
     mass: 0

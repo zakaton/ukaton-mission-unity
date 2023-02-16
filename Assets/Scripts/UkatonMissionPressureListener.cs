@@ -9,8 +9,6 @@ public class UkatonMissionPressureListener : MonoBehaviour
   {
     ukatonMission.pressureDataEvents.pressure.AddListener(onPressureUpdate);
     sensors = transform.Find("sensors");
-    Debug.Log(sensors);
-
   }
 
   public void onPressureUpdate()
