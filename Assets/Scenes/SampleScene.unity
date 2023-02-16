@@ -306,15 +306,15 @@ MonoBehaviour:
   loggerText: {fileID: 592308499}
   deviceName: mission5
   autoConnect: 1
-  isInsole: 0
-  insoleSide: 1
+  isInsole: 1
+  insoleSide: 0
   motionSensorDataRates:
     acceleration: 0
     gravity: 0
     linearAcceleration: 0
     rotation: 0
     magnetometer: 0
-    quaternion: 20
+    quaternion: 100
   pressureSensorDataRates:
     singleByte: 0
     doubleByte: 0
@@ -605,7 +605,7 @@ GameObject:
   - component: {fileID: 452808919}
   - component: {fileID: 452808920}
   m_Layer: 0
-  m_Name: rightShoe
+  m_Name: quaternionListener
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -618,14 +618,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 452808918}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.292, y: 0.165, z: 1.47}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 911298686}
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 611530862}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &452808920
 MonoBehaviour:
@@ -812,6 +812,38 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &611530861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 611530862}
+  m_Layer: 0
+  m_Name: rightShoe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &611530862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611530861}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.292, y: 0.165, z: 1.47}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 452808919}
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &623048118
 GameObject:
   m_ObjectHideFlags: 0
@@ -1441,7 +1473,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7566701813355601476, guid: 0a8f00f79d84d4a03add61dabc0f2973, type: 3}
       propertyPath: m_Name
-      value: shoe
+      value: model
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 9199261849990390558, guid: 0a8f00f79d84d4a03add61dabc0f2973, type: 3}
@@ -1558,7 +1590,7 @@ GameObject:
   m_Component:
   - component: {fileID: 911298686}
   m_Layer: 0
-  m_Name: shoeRotation
+  m_Name: rotationOffset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

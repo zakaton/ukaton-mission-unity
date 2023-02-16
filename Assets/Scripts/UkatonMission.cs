@@ -6,7 +6,7 @@ using System.Buffers.Binary;
 
 /*
   TODO
-    include models
+    fix quaternion
 */
 
 public class UkatonMission : MonoBehaviour
@@ -353,12 +353,15 @@ public class UkatonMission : MonoBehaviour
     }
     didSetupQuaternions = true;
 
-    insoleCorrectionQuaternions[InsoleSide.right] = Quaternion.Euler(0, (float)-Math.PI / 2, 0);
-    insoleCorrectionQuaternions[InsoleSide.left] = Quaternion.Euler((float)-Math.PI / 2, (float)-Math.PI / 2, 0);
+    insoleCorrectionQuaternions[InsoleSide.right] = Quaternion.Euler(0, (float)Math.PI / 2 * Mathf.Rad2Deg, (float)-Math.PI / 2 * Mathf.Rad2Deg);
+    insoleCorrectionQuaternions[InsoleSide.left] = Quaternion.Euler(0, (float)Math.PI / 2 * Mathf.Rad2Deg, (float)-Math.PI / 2 * Mathf.Rad2Deg);
+    insoleCorrectionQuaternions[InsoleSide.left] *= Quaternion.Euler(0, (float)Math.PI * Mathf.Rad2Deg, 0);
+    insoleCorrectionQuaternions[InsoleSide.left] *= Quaternion.Euler((float)-Math.PI / 2 * Mathf.Rad2Deg, 0, 0);
 
-    correctionQuaternions[DeviceType.motionModule] = Quaternion.Euler(0, (float)-Math.PI / 2, 0);
-    correctionQuaternions[DeviceType.leftInsole] = Quaternion.Euler(0, (float)Math.PI, 0);
-    correctionQuaternions[DeviceType.rightInsole] = Quaternion.Euler(0, (float)Math.PI, 0);
+    correctionQuaternions[DeviceType.motionModule] = Quaternion.Euler(0, 0, 0);
+    correctionQuaternions[DeviceType.rightInsole] = Quaternion.Euler(0, (float)Math.PI * Mathf.Rad2Deg, 0);
+    correctionQuaternions[DeviceType.rightInsole] *= Quaternion.Euler(-(float)-Math.PI / 2 * Mathf.Rad2Deg, 0, 0);
+    correctionQuaternions[DeviceType.leftInsole] = Quaternion.Euler(0, (float)Math.PI * Mathf.Rad2Deg, 0);
   }
 
   public class MotionData
@@ -668,12 +671,14 @@ public class UkatonMission : MonoBehaviour
 
     //quaternion.Set(-y, -w, -x, z);
     quaternion.Set(-y, w, x, z);
+    quaternion.Set(quaternion.z, quaternion.y, -quaternion.x, quaternion.w);
 
     if (isInsole)
     {
       quaternion *= insoleCorrectionQuaternion;
     }
     quaternion *= correctionQuaternion;
+
 
     return quaternion;
   }

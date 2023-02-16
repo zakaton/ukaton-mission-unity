@@ -11,6 +11,6 @@ public class UkatonMissionQuaternionListener : MonoBehaviour
 
   public void onQuaternionUpdate()
   {
-    transform.rotation = ukatonMission.motionData.quaternion;
+    transform.localRotation = ukatonMission.motionData.quaternion;
   }
 }
