@@ -245,18 +245,13 @@ public class UkatonMission : MonoBehaviour
 
     connectionEvents.onConnecting.Invoke();
 
-    StatusMessage = "A";
     Reset();
-    StatusMessage = "B";
-
     try
     {
 
       BluetoothLEHardwareInterface.Initialize(true, false, () =>
       {
-        StatusMessage = "C";
         SetState(States.Scan, 0.1f);
-        StatusMessage = "C";
       }, (error) =>
       {
         StatusMessage = "Error during initialize: " + error;
