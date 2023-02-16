@@ -6,7 +6,6 @@ using System.Buffers.Binary;
 
 /*
   TODO
-    fix working on quest
     include models
 */
 
