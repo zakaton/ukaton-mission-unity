@@ -49,6 +49,18 @@ public class UkatonMissionEditorWindow : EditorWindow
     sceneView.Repaint();
   }
 
+  void setCameraPivot()
+  {
+    var selectedGameObject = Selection.activeGameObject;
+    if (selectedGameObject != null)
+    {
+      var sceneView = UnityEditor.SceneView.lastActiveSceneView;
+      sceneView.pivot = selectedGameObject.transform.position;
+      sceneView.Repaint();
+    }
+
+  }
+
   void onConnect()
   {
     isConnecting = false;
@@ -85,17 +97,19 @@ public class UkatonMissionEditorWindow : EditorWindow
 
   void onQuaternion()
   {
-    var selectedGameObject = Selection.activeGameObject;
-    if (idsToOrbit.Contains(selectedGameObject.GetInstanceID()))
-    {
-      selectedGameObject.transform.rotation = ukatonMission.motionData.quaternion;
-    }
-
     if (shouldOrbitCamera)
     {
       var sceneView = UnityEditor.SceneView.lastActiveSceneView;
       sceneView.rotation = ukatonMission.motionData.quaternion;
       sceneView.Repaint();
+    }
+    else
+    {
+      var selectedGameObject = Selection.activeGameObject;
+      if (idsToOrbit.Contains(selectedGameObject.GetInstanceID()))
+      {
+        selectedGameObject.transform.rotation = ukatonMission.motionData.quaternion;
+      }
     }
   }
 
@@ -127,10 +141,12 @@ public class UkatonMissionEditorWindow : EditorWindow
       }
     }
 
+    /*
     if (GUILayout.Button("resetCameraView"))
     {
       resetCameraView();
     }
+    */
 
 
     if (isConnected)
@@ -195,6 +211,11 @@ public class UkatonMissionEditorWindow : EditorWindow
 
     GUILayout.Label("Camera", EditorStyles.boldLabel);
     shouldOrbitCamera = EditorGUILayout.Toggle("orbit camera", shouldOrbitCamera);
+
+    if (GUILayout.Button("set camera pivot"))
+    {
+      setCameraPivot();
+    }
   }
 
   void OnSelectionChange()
