@@ -267,7 +267,7 @@ public class UkatonMissionBaseClass
     {
       BluetoothLEHardwareInterface.Initialize(true, false, () =>
       {
-        SetState(States.Scan, 1f);
+        SetState(States.Scan, 2f);
       }, (error) =>
       {
         StatusMessage = "Error during initialize: " + error;

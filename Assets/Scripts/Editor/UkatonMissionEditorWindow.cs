@@ -141,12 +141,10 @@ public class UkatonMissionEditorWindow : EditorWindow
       }
     }
 
-    /*
     if (GUILayout.Button("resetCameraView"))
     {
       resetCameraView();
     }
-    */
 
 
     if (isConnected)
