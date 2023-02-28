@@ -9,7 +9,6 @@ using System.Linq;
 
 /*
     TODO
-        setup basic game
         discovery ping
 */
 
