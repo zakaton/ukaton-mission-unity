@@ -19,7 +19,7 @@ public class UkatonMissionUDP : MonoBehaviour
   private string address = "0.0.0.0";
 
   [SerializeField]
-  private UkatonMissionBaseClass ukatonMission = new();
+  public UkatonMissionBaseClass ukatonMission = new();
   enum MessageType
   {
     PING,
@@ -64,7 +64,7 @@ public class UkatonMissionUDP : MonoBehaviour
   {
     if (udp != null)
     {
-      Debug.Log("CONNECTED!");
+      ukatonMission.logger.Log("CONNECTED!");
       var bytesList = ukatonMission.CreateSensorConfiguration();
       bytesList.Insert(0, (byte)bytesList.Count());
       bytesList.Insert(0, (byte)MessageType.SET_SENSOR_DATA_CONFIGURATIONS);
@@ -99,7 +99,7 @@ public class UkatonMissionUDP : MonoBehaviour
         LastTimeReceivedData = Time.time;
 
         //Process received data
-        Debug.Log(String.Format("received {0} bytes", bytesToProcess.Length));
+        //Debug.Log(String.Format("received {0} bytes", bytesToProcess.Length));
         ProcessSensorData(bytesToProcess);
       }
     }
@@ -129,7 +129,7 @@ public class UkatonMissionUDP : MonoBehaviour
   {
     var bytes = new byte[] { (byte)MessageType.PING };
     udp.SendAsync(bytes, bytes.Length);
-    Debug.Log("PING");
+    ukatonMission.logger.Log("PING");
     LastPingTime = Time.time;
   }
 
@@ -138,7 +138,7 @@ public class UkatonMissionUDP : MonoBehaviour
   {
     udp = new UdpClient(address, 9999);
     var bytes = new byte[] { (byte)MessageType.PING };
-    Debug.Log("initial ping");
+    ukatonMission.logger.Log("initial ping");
     udp.SendAsync(bytes, bytes.Length);
     while (true)
     {
