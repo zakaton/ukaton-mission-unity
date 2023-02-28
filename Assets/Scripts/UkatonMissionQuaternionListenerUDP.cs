@@ -9,8 +9,22 @@ public class UkatonMissionQuaternionListenerUDP : MonoBehaviour
     ukatonMissionUDP.ukatonMission.motionDataEvents.quaternion.AddListener(onQuaternionUpdate);
   }
 
+  public bool resetYaw = false;
+  private bool didCalibrateYawOnce = true;
+  public float yawOffset = 0;
   public void onQuaternionUpdate()
   {
-    transform.localRotation = ukatonMissionUDP.ukatonMission.motionData.quaternion;
+    var e = ukatonMissionUDP.ukatonMission.motionData.quaternion.eulerAngles;
+    if (resetYaw)
+    {
+      yawOffset = e.y;
+      resetYaw = false;
+      didCalibrateYawOnce = true;
+    }
+    if (didCalibrateYawOnce)
+    {
+      var q = Quaternion.Euler(e.x, e.y - yawOffset, e.z);
+      transform.localRotation = Quaternion.Lerp(transform.localRotation, q, 0.5f);
+    }
   }
 }

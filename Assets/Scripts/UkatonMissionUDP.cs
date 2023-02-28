@@ -9,7 +9,7 @@ using System.Linq;
 
 /*
     TODO
-        parse data
+        setup basic game
         discovery ping
 */
 
