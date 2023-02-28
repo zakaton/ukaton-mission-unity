@@ -24,7 +24,7 @@ public class UkatonMissionQuaternionListenerUDP : MonoBehaviour
     if (didCalibrateYawOnce)
     {
       var q = Quaternion.Euler(e.x, e.y - yawOffset, e.z);
-      transform.localRotation = Quaternion.Lerp(transform.localRotation, q, 0.5f);
+      transform.localRotation = Quaternion.Lerp(transform.localRotation, q, 0.1f);
     }
   }
 }

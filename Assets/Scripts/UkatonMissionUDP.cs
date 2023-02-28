@@ -1,9 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
 using System;
 using System.Linq;
 
@@ -16,6 +11,8 @@ public class UkatonMissionUDP : MonoBehaviour
 {
   [SerializeField]
   private string address = "0.0.0.0";
+
+  private UdpConnection connection;
 
   [SerializeField]
   public UkatonMissionBaseClass ukatonMission = new();
@@ -39,12 +36,6 @@ public class UkatonMissionUDP : MonoBehaviour
     SENSOR_DATA
   }
 
-  static UdpClient udp;
-  Thread thread;
-
-  static readonly object lockObject = new object();
-  bool processData = false;
-
   private float LastPingTime = 0;
   private float LastTimeReceivedData = 0;
 
@@ -52,64 +43,45 @@ public class UkatonMissionUDP : MonoBehaviour
   {
     ukatonMission.Start();
     ukatonMission.connectionEvents.onConnect.AddListener(OnConnect);
-    if (ukatonMission.autoConnect)
-    {
-      thread = new Thread(new ThreadStart(ThreadMethod));
-      thread.Start();
-    }
+
+    connection = new UdpConnection();
+    connection.StartConnection(address, 9999, 11000);
   }
 
-  void OnConnect()
-  {
-    if (udp != null)
-    {
-      ukatonMission.logger.Log("CONNECTED!");
-      var bytesList = ukatonMission.CreateSensorConfiguration();
-      bytesList.Insert(0, (byte)bytesList.Count());
-      bytesList.Insert(0, (byte)MessageType.SET_SENSOR_DATA_CONFIGURATIONS);
-      var bytesArray = bytesList.ToArray();
-      udp.SendAsync(bytesArray, bytesArray.Length);
-      LastPingTime = Time.time;
-    }
-  }
 
   void OnApplicationQuit()
   {
-    if (udp != null)
-    {
-      udp.Close();
-    }
-    thread.Abort();
+    connection.Stop();
+  }
+
+  void OnDestroy()
+  {
+    connection.Stop();
   }
 
   void Update()
   {
-    if (processData)
+    var messages = connection.getMessages();
+    if (messages.Length > 0)
     {
-      /*lock object to make sure there data is 
-       *not being accessed from multiple threads at the same time*/
-      lock (lockObject)
+      foreach (var message in messages)
       {
-        processData = false;
-        if (LastTimeReceivedData == 0)
-        {
-          ukatonMission.connectionEvents.onConnect.Invoke();
-        }
-        LastTimeReceivedData = Time.time;
-
-        //Process received data
-        //Debug.Log(String.Format("received {0} bytes", bytesToProcess.Length));
-        ProcessSensorData(bytesToProcess);
+        ProcessData(message);
       }
+      if (LastTimeReceivedData == 0)
+      {
+        ukatonMission.connectionEvents.onConnect.Invoke();
+      }
+      LastTimeReceivedData = Time.time;
     }
 
-    if (LastTimeReceivedData > 0 && Time.time - LastPingTime > 1)
+    if (Time.time - LastPingTime > 1)
     {
       Ping();
     }
   }
 
-  void ProcessSensorData(byte[] bytes)
+  void ProcessData(byte[] bytes)
   {
     var messageType = (MessageType)bytes[0];
     switch (messageType)
@@ -117,6 +89,10 @@ public class UkatonMissionUDP : MonoBehaviour
       case MessageType.SENSOR_DATA:
         var segment = new ArraySegment<byte>(bytes, 1, bytes.Length - 1).ToArray();
         ukatonMission.ProcessSensorData(segment);
+        break;
+      case MessageType.BATTERY_LEVEL:
+        //var batteryLevel = bytes[1];
+        //Debug.Log($"battery level: {batteryLevel}");
         break;
       default:
         Debug.Log($"uncaught message type {messageType}");
@@ -127,43 +103,20 @@ public class UkatonMissionUDP : MonoBehaviour
   void Ping()
   {
     var bytes = new byte[] { (byte)MessageType.PING };
-    udp.SendAsync(bytes, bytes.Length);
+    connection.Send(bytes);
     ukatonMission.logger.Log("PING");
     LastPingTime = Time.time;
   }
 
-  private byte[] bytesToProcess;
-  private void ThreadMethod()
+  void OnConnect()
   {
-    udp = new UdpClient(address, 9999);
-    var bytes = new byte[] { (byte)MessageType.PING };
-    ukatonMission.logger.Log("initial ping");
-    udp.SendAsync(bytes, bytes.Length);
-    while (true)
-    {
-      IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
-
-      byte[] receiveBytes = udp.Receive(ref RemoteIpEndPoint);
-
-      /*lock object to make sure there data is 
-      *not being accessed from multiple threads at the same time*/
-      lock (lockObject)
-      {
-        bytesToProcess = receiveBytes;
-        processData = true;
-
-        /*
-        returnData = Encoding.ASCII.GetString(receiveBytes);
-
-        Debug.Log(returnData);
-        Debug.Log(returnData.Length);
-        if (returnData.Length > 0)
-        {
-          //Done, notify the Update function
-          processData = true;
-        }
-        */
-      }
-    }
+    ukatonMission.logger.Log("CONNECTED!");
+    var bytesList = ukatonMission.CreateSensorConfiguration();
+    bytesList.Insert(0, (byte)bytesList.Count());
+    bytesList.Insert(0, (byte)MessageType.SET_SENSOR_DATA_CONFIGURATIONS);
+    var bytesArray = bytesList.ToArray();
+    //Debug.Log(string.Join(", ", bytesArray));
+    connection.Send(bytesArray);
+    LastPingTime = Time.time;
   }
 }
