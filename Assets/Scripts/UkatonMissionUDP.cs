@@ -2,11 +2,6 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-/*
-    TODO
-        discovery ping
-*/
-
 public class UkatonMissionUDP : MonoBehaviour
 {
   [SerializeField]
