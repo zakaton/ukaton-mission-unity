@@ -4,6 +4,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Buffers.Binary;
 
+[Serializable]
 public class UkatonMissionBaseClass
 {
   public TMPro.TMP_Text loggerText;
@@ -279,7 +280,7 @@ public class UkatonMissionBaseClass
     }
   }
 
-  private List<byte> CreateSensorConfiguration()
+  public List<byte> CreateSensorConfiguration()
   {
     List<byte> sensorConfiguration = new();
 
@@ -453,7 +454,7 @@ public class UkatonMissionBaseClass
     }
   }
 
-  private void ProcessSensorData(byte[] bytes)
+  public void ProcessSensorData(byte[] bytes)
   {
     logger.Log(String.Format("received {0} bytes", bytes.Length));
     int byteOffset = 0;

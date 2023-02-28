@@ -1727,31 +1727,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.417
+      value: 4.74
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.634
+      value: -5.83
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7071068
+      value: 0.97708124
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.7071068
+      value: 0.21286698
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 90
+      value: 24.581
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 126d619cf4daa52469682f85c1378b4a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -2489,6 +2489,116 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1615207288}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1628765113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1628765114}
+  - component: {fileID: 1628765115}
+  m_Layer: 0
+  m_Name: UkatonMissionUDP
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1628765114
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628765113}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.04754497, y: 0.54745764, z: -0.25373268}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1628765115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1628765113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc8e53ee7e3ab4f8eb7c936e4520b0ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  address: 192.168.4.70
+  ukatonMission:
+    loggerText: {fileID: 0}
+    deviceName: leftBicep
+    autoConnect: 1
+    isInsole: 0
+    insoleSide: 0
+    motionSensorDataRates:
+      acceleration: 0
+      gravity: 0
+      linearAcceleration: 0
+      rotation: 0
+      magnetometer: 0
+      quaternion: 20
+    pressureSensorDataRates:
+      singleByte: 0
+      doubleByte: 0
+      centerOfMass: 0
+      mass: 0
+      heelToToe: 0
+    enableLogging: 0
+    connectionEvents:
+      onConnect:
+        m_PersistentCalls:
+          m_Calls: []
+      onConnecting:
+        m_PersistentCalls:
+          m_Calls: []
+      onStopConnecting:
+        m_PersistentCalls:
+          m_Calls: []
+      onDisconnect:
+        m_PersistentCalls:
+          m_Calls: []
+    motionDataEvents:
+      <acceleration>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <gravity>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <linearAcceleration>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <rotation>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <magnetometer>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <quaternion>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+    pressureDataEvents:
+      pressure:
+        m_PersistentCalls:
+          m_Calls: []
+      centerOfMass:
+        m_PersistentCalls:
+          m_Calls: []
+      mass:
+        m_PersistentCalls:
+          m_Calls: []
+      heelToToe:
+        m_PersistentCalls:
+          m_Calls: []
 --- !u!1 &1662067937
 GameObject:
   m_ObjectHideFlags: 0
