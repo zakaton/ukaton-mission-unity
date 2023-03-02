@@ -131,7 +131,7 @@ public class UkatonMissionUDP : UkatonMission
     bytesList.Insert(0, (byte)bytesList.Count());
     bytesList.Insert(0, (byte)MessageType.SET_SENSOR_DATA_CONFIGURATIONS);
     var bytesArray = bytesList.ToArray();
-    Debug.Log(string.Join(", ", bytesArray));
+    logger.Log(string.Join(", ", bytesArray));
     connection.Send(bytesArray);
     LastPingTime = Time.time;
   }

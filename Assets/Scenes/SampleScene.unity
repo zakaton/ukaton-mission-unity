@@ -525,7 +525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f129045483947f39cbd103a3e071cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionType: 0
+  connectionType: 1
   ukatonMissionBLE:
     loggerText: {fileID: 0}
     IsConnected: 0
@@ -547,7 +547,7 @@ MonoBehaviour:
       centerOfMass: 0
       mass: 0
       heelToToe: 0
-    enableLogging: 1
+    enableLogging: 0
     connectionEvents:
       onConnect:
         m_PersistentCalls:
@@ -614,7 +614,7 @@ MonoBehaviour:
       centerOfMass: 0
       mass: 0
       heelToToe: 0
-    enableLogging: 1
+    enableLogging: 0
     connectionEvents:
       onConnect:
         m_PersistentCalls:
@@ -711,7 +711,7 @@ MonoBehaviour:
     linearAcceleration: 0
     rotation: 0
     magnetometer: 0
-    quaternion: 0
+    quaternion: 20
   pressureSensorDataRates:
     singleByte: 0
     doubleByte: 0
@@ -1190,13 +1190,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 611530862}
+  - component: {fileID: 611530863}
   m_Layer: 0
   m_Name: rightShoe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &611530862
 Transform:
   m_ObjectHideFlags: 0
@@ -1213,6 +1214,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &611530863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611530861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8eff29202975499abc4b386671f16c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ukatonMissionMonoBehavior: {fileID: 226892789}
+  resetYaw: 0
+  yawOffset: 0
 --- !u!1 &623048118
 GameObject:
   m_ObjectHideFlags: 0
