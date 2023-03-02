@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-public class UkatonMissions
+public class UkatonMissionsMonoBehaviour : MonoBehaviour
 {
   [Header("Insoles")]
   [SerializeField]
