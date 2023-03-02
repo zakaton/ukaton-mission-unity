@@ -19,7 +19,7 @@ public class UdpConnection
 
   public void StartConnection(string sendIp, int sendPort, int receivePort)
   {
-    try { udpClient = new UdpClient(receivePort); }
+    try { udpClient = new UdpClient(); }
     catch (Exception e)
     {
       Debug.Log("Failed to listen for UDP at port " + receivePort + ": " + e.Message);

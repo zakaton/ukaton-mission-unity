@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEditor;
 
 [Serializable]
 public class UkatonMissionUDP : UkatonMission
@@ -8,7 +9,7 @@ public class UkatonMissionUDP : UkatonMission
   [SerializeField]
   public string address = "0.0.0.0";
 
-  public UdpConnection connection;
+  public UdpConnection connection = null;
 
   enum MessageType
   {
@@ -38,8 +39,6 @@ public class UkatonMissionUDP : UkatonMission
   public override void Start()
   {
     base.Start();
-    connection = new UdpConnection();
-    connection.StartConnection(address, 9999, 11000);
     if (autoConnect)
     {
       Connect();
@@ -48,6 +47,12 @@ public class UkatonMissionUDP : UkatonMission
 
   public override void Connect()
   {
+    if (connection == null)
+    {
+      Debug.Log(address);
+      connection = new UdpConnection();
+      connection.StartConnection(address, 9999, 11000); // TODO - different ports for diff
+    }
     IsConnecting = true;
     shouldConnect = true;
     connectionEvents.onConnecting.Invoke();
@@ -62,6 +67,11 @@ public class UkatonMissionUDP : UkatonMission
 
   public override void Update()
   {
+    if (connection == null)
+    {
+      return;
+    }
+
     CheckUpdateSensorDataConfiguration();
 
     var messages = connection.getMessages();
@@ -75,12 +85,12 @@ public class UkatonMissionUDP : UkatonMission
       {
         OnConnect();
       }
-      LastTimeReceivedData = Time.time;
+      LastTimeReceivedData = time;
     }
 
-    if (shouldConnect && Time.time - LastPingTime > 1)
+    if (shouldConnect && time - LastPingTime > 1)
     {
-      if (LastTimeReceivedData > 0 && Time.time - LastTimeReceivedData > 5)
+      if (LastTimeReceivedData > 0 && time - LastTimeReceivedData > 5)
       {
         _UpdateSensorDataConfiguration();
       }
@@ -115,7 +125,15 @@ public class UkatonMissionUDP : UkatonMission
     var bytes = new byte[] { (byte)(IsConnected ? MessageType.PING : MessageType.GET_NAME) };
     connection.Send(bytes);
     logger.Log("PING");
-    LastPingTime = Time.time;
+    LastPingTime = time;
+  }
+
+  private float time
+  {
+    get
+    {
+      return EditorApplication.isPlaying ? Time.time : (float)EditorApplication.timeSinceStartup;
+    }
   }
 
   void OnConnect()
@@ -133,6 +151,6 @@ public class UkatonMissionUDP : UkatonMission
     var bytesArray = bytesList.ToArray();
     logger.Log(string.Join(", ", bytesArray));
     connection.Send(bytesArray);
-    LastPingTime = Time.time;
+    LastPingTime = time;
   }
 }

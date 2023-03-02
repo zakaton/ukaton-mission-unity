@@ -79,13 +79,13 @@ public class UkatonMissionEditorWindow : EditorWindow
 
   void enableQuaternion()
   {
-    ukatonMission.motionSensorDataRates.quaternion = UkatonMission.SensorDataRate._10;
-    ukatonMission.UpdateSensorDataConfiguration();
+    ukatonMission.motionSensorDataRates.quaternion = UkatonMission.SensorDataRate._20;
+    ukatonMission._UpdateSensorDataConfiguration();
   }
   void disableQuaternion()
   {
     ukatonMission.motionSensorDataRates.quaternion = UkatonMission.SensorDataRate._0;
-    ukatonMission.UpdateSensorDataConfiguration();
+    ukatonMission._UpdateSensorDataConfiguration();
   }
 
   void onQuaternion()
@@ -108,14 +108,14 @@ public class UkatonMissionEditorWindow : EditorWindow
 
   private void OnDestroy()
   {
-    ukatonMission.Disconnect();
-    ukatonMission.Update();
+    ukatonMission.connection.Stop();
   }
 
   void OnGUI()
   {
     GUILayout.Label("Device Information", EditorStyles.boldLabel);
     ukatonMission.deviceName = EditorGUILayout.TextField("Device Name", ukatonMission.deviceName);
+    ukatonMission.address = EditorGUILayout.TextField("IP Address", ukatonMission.address);
     ukatonMission.enableLogging = EditorGUILayout.Toggle("enable debugging", ukatonMission.enableLogging);
     if (isConnected)
     {

@@ -75,7 +75,7 @@ public class UkatonMission
     }
   }
   [SerializeField]
-  public MotionSensorDataRates motionSensorDataRates;
+  public MotionSensorDataRates motionSensorDataRates = new();
 
   [Serializable]
   public class PressureSensorDataRates
@@ -99,7 +99,7 @@ public class UkatonMission
     }
   }
   [SerializeField]
-  public PressureSensorDataRates pressureSensorDataRates;
+  public PressureSensorDataRates pressureSensorDataRates = new();
 
   public Logger logger = new Logger(Debug.unityLogger.logHandler);
   [SerializeField]
@@ -148,7 +148,7 @@ public class UkatonMission
     }
   }
   [SerializeField]
-  public MotionDataEvents motionDataEvents;
+  public MotionDataEvents motionDataEvents = new();
 
   [Serializable]
   public class PressureDataEvents
@@ -158,7 +158,7 @@ public class UkatonMission
     public UnityEvent mass;
     public UnityEvent heelToToe;
   }
-  public PressureDataEvents pressureDataEvents;
+  public PressureDataEvents pressureDataEvents = new();
 
   public string StatusMessage
   {
