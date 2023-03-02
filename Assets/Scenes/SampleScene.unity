@@ -553,7 +553,7 @@ MonoBehaviour:
     IsConnected: 0
     IsConnecting: 0
     deviceName: mission11
-    autoConnect: 0
+    autoConnect: 1
     isInsole: 0
     insoleSide: 0
     motionSensorDataRates:
@@ -569,7 +569,7 @@ MonoBehaviour:
       centerOfMass: 0
       mass: 0
       heelToToe: 0
-    enableLogging: 0
+    enableLogging: 1
     connectionEvents:
       onConnect:
         m_PersistentCalls:
@@ -620,7 +620,7 @@ MonoBehaviour:
     IsConnected: 0
     IsConnecting: 0
     deviceName: mission11
-    autoConnect: 0
+    autoConnect: 1
     isInsole: 0
     insoleSide: 0
     motionSensorDataRates:
@@ -636,7 +636,7 @@ MonoBehaviour:
       centerOfMass: 0
       mass: 0
       heelToToe: 0
-    enableLogging: 0
+    enableLogging: 1
     connectionEvents:
       onConnect:
         m_PersistentCalls:
@@ -686,19 +686,7 @@ MonoBehaviour:
   motionDataEvents:
     <acceleration>k__BackingField:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: 
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
     <gravity>k__BackingField:
       m_PersistentCalls:
         m_Calls: []
@@ -1413,7 +1401,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &611530862
 Transform:
   m_ObjectHideFlags: 0
@@ -2187,19 +2175,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4227970259751778085, guid: 0a8f00f79d84d4a03add61dabc0f2973, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7215532
+      value: -0.9255911
       objectReference: {fileID: 0}
     - target: {fileID: 4227970259751778085, guid: 0a8f00f79d84d4a03add61dabc0f2973, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.11830266
+      value: 0.18816996
       objectReference: {fileID: 0}
     - target: {fileID: 4227970259751778085, guid: 0a8f00f79d84d4a03add61dabc0f2973, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.6814401
+      value: 0.32824457
       objectReference: {fileID: 0}
     - target: {fileID: 4227970259751778085, guid: 0a8f00f79d84d4a03add61dabc0f2973, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.03170036
+      value: 0.011352452
       objectReference: {fileID: 0}
     - target: {fileID: 4227970259751778085, guid: 0a8f00f79d84d4a03add61dabc0f2973, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
