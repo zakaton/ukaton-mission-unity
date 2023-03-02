@@ -4,9 +4,13 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Buffers.Binary;
 
-public class UkatonMission : MonoBehaviour
+[Serializable]
+public class UkatonMission
 {
   public TMPro.TMP_Text loggerText;
+
+  public bool IsConnected = false;
+  public bool IsConnecting = false;
 
   public enum DeviceType { motionModule, leftInsole, rightInsole };
   public enum InsoleSide { left, right }
@@ -39,7 +43,7 @@ public class UkatonMission : MonoBehaviour
   }
 
   [SerializeField]
-  public string deviceName = "Device Name";
+  public string deviceName = "leftBicep";
   [SerializeField]
   public bool autoConnect = false;
   [SerializeField]
@@ -71,7 +75,7 @@ public class UkatonMission : MonoBehaviour
     }
   }
   [SerializeField]
-  private MotionSensorDataRates motionSensorDataRates = new();
+  public MotionSensorDataRates motionSensorDataRates;
 
   [Serializable]
   public class PressureSensorDataRates
@@ -95,11 +99,11 @@ public class UkatonMission : MonoBehaviour
     }
   }
   [SerializeField]
-  private PressureSensorDataRates pressureSensorDataRates = new();
+  public PressureSensorDataRates pressureSensorDataRates;
 
   public Logger logger = new Logger(Debug.unityLogger.logHandler);
   [SerializeField]
-  public bool enableLogging;
+  public bool enableLogging = true;
   public void UpdateLogging()
   {
     logger.logEnabled = enableLogging;
@@ -108,11 +112,12 @@ public class UkatonMission : MonoBehaviour
   [Serializable]
   public class ConnectionEvents
   {
-    public UnityEvent onConnect;
-    public UnityEvent onConnecting;
-    public UnityEvent onDisconnect;
+    public UnityEvent onConnect = new();
+    public UnityEvent onConnecting = new();
+    public UnityEvent onStopConnecting = new();
+    public UnityEvent onDisconnect = new();
   }
-  public ConnectionEvents connectionEvents;
+  public ConnectionEvents connectionEvents = new();
 
   [Serializable]
   public class MotionDataEvents
@@ -155,44 +160,7 @@ public class UkatonMission : MonoBehaviour
   }
   public PressureDataEvents pressureDataEvents;
 
-  static private string GENERATE_UUID(string value)
-  {
-    return String.Format("5691eddf-{0}-4420-b7a5-bb8751ab5181", value);
-  }
-  static bool IsEqual(string uuid1, string uuid2)
-  {
-    if (uuid1.Length == 4)
-      uuid1 = GENERATE_UUID(uuid1);
-    if (uuid2.Length == 4)
-      uuid2 = GENERATE_UUID(uuid2);
-
-    return (uuid1.ToUpper().Equals(uuid2.ToUpper()));
-  }
-
-  private string serviceUUID = GENERATE_UUID("0000");
-  private string sensorDataConfigurationCharacteristicUUID = GENERATE_UUID("6001");
-  private string sensorDataCharacteristicUUID = GENERATE_UUID("6002");
-
-  private bool _connected = false;
-  private float _timeout = 0f;
-  private States _state = States.None;
-  private string _deviceAddress;
-  private bool _foundSensorDataConfigurationCharacteristicUUID = false;
-  private bool _foundSensorDataCharacteristicUUID = false;
-  private bool _rssiOnly = false;
-  private int _rssi = 0;
-  void Reset()
-  {
-    _connected = false;
-    _timeout = 0f;
-    _state = States.None;
-    _deviceAddress = null;
-    _foundSensorDataConfigurationCharacteristicUUID = false;
-    _foundSensorDataCharacteristicUUID = false;
-    _rssi = 0;
-  }
-
-  private string StatusMessage
+  public string StatusMessage
   {
     set
     {
@@ -201,69 +169,37 @@ public class UkatonMission : MonoBehaviour
       {
         loggerText.text = value;
       }
-      //BluetoothLEHardwareInterface.Log(value);
     }
   }
 
-  enum States
-  {
-    None,
-    Scan,
-    ScanRSSI,
-    ReadRSSI,
-    Connect,
-    RequestMTU,
-    Subscribe,
-    Unsubscribe,
-    Disconnect,
-  }
-  void SetState(States newState, float timeout)
-  {
-    _state = newState;
-    _timeout = timeout;
-  }
-
   // Start is called before the first frame update
-  void Start()
+  public virtual void Start()
   {
     NormalizePressurePositions();
     SetupQuaternions();
     UpdateLogging();
-    connectionEvents.onConnect.AddListener(updateSensorDataConfiguration);
-    if (autoConnect)
-    {
-      Connect();
-    }
+    connectionEvents.onConnect.AddListener(_UpdateSensorDataConfiguration);
   }
-
-  public void Connect()
+  protected bool ShouldUpdateSensorDataConfiguration = false;
+  public void UpdateSensorDataConfiguration()
   {
-    if (_connected)
+    ShouldUpdateSensorDataConfiguration = true;
+  }
+  protected void CheckUpdateSensorDataConfiguration()
+  {
+    if (ShouldUpdateSensorDataConfiguration)
     {
-      return;
-    }
-
-    connectionEvents.onConnecting.Invoke();
-
-    Reset();
-    try
-    {
-
-      BluetoothLEHardwareInterface.Initialize(true, false, () =>
-      {
-        SetState(States.Scan, 0.1f);
-      }, (error) =>
-      {
-        StatusMessage = "Error during initialize: " + error;
-      });
-    }
-    catch (Exception e)
-    {
-      StatusMessage = e.Message;
+      ShouldUpdateSensorDataConfiguration = false;
+      _UpdateSensorDataConfiguration();
     }
   }
+  public virtual void Update()
+  { }
+  public virtual void Connect() { }
+  public virtual void Disconnect() { }
+  public virtual void _UpdateSensorDataConfiguration() { }
 
-  private List<byte> CreateSensorConfiguration()
+  public List<byte> CreateSensorConfiguration()
   {
     List<byte> sensorConfiguration = new();
 
@@ -299,23 +235,6 @@ public class UkatonMission : MonoBehaviour
     }
 
     return sensorConfiguration;
-  }
-
-  public void updateSensorDataConfiguration()
-  {
-    if (!_connected)
-    {
-      return;
-    }
-
-    List<byte> sensorDataConfiguration = CreateSensorConfiguration();
-
-    byte[] data = sensorDataConfiguration.ToArray();
-
-    BluetoothLEHardwareInterface.WriteCharacteristic(_deviceAddress, serviceUUID, sensorDataConfigurationCharacteristicUUID, data, data.Length, true, (characteristicUUID) =>
-    {
-      BluetoothLEHardwareInterface.Log("Write Succeeded");
-    });
   }
 
   Dictionary<InsoleSide, Quaternion> insoleCorrectionQuaternions = new();
@@ -437,7 +356,7 @@ public class UkatonMission : MonoBehaviour
     }
   }
 
-  private void ProcessSensorData(byte[] bytes)
+  public void ProcessSensorData(byte[] bytes)
   {
     logger.Log(String.Format("received {0} bytes", bytes.Length));
     int byteOffset = 0;
@@ -718,204 +637,11 @@ public class UkatonMission : MonoBehaviour
     }
     didNormalizePressurePositions = true;
 
-    Debug.Log("normalizing pressure positions...");
+    StatusMessage = "normalizing pressure positions...";
     for (int i = 0; i < PressureData.numberOfPressureSensors; i++)
     {
       PressurePositions[i, 0] /= 93.257;
       PressurePositions[i, 1] /= 265.069;
-    }
-  }
-
-  // Update is called once per frame
-  void Update()
-  {
-    if (_timeout > 0f)
-    {
-      _timeout -= Time.deltaTime;
-      if (_timeout <= 0f)
-      {
-        _timeout = 0f;
-
-        switch (_state)
-        {
-          case States.None:
-            break;
-
-          case States.Scan:
-            StatusMessage = "Scanning for " + deviceName;
-
-            BluetoothLEHardwareInterface.ScanForPeripheralsWithServices(null, (address, name) =>
-            {
-              // if your device does not advertise the rssi and manufacturer specific data
-              // then you must use this callback because the next callback only gets called
-              // if you have manufacturer specific data
-
-              if (!_rssiOnly)
-              {
-                if (name.Contains(deviceName))
-                {
-                  StatusMessage = "Found " + name;
-
-                  // found a device with the name we want
-                  // this example does not deal with finding more than one
-                  _deviceAddress = address;
-                  SetState(States.Connect, 0.5f);
-                }
-              }
-
-            }, (address, name, rssi, bytes) =>
-            {
-
-              // use this one if the device responses with manufacturer specific data and the rssi
-
-              if (name.Contains(deviceName))
-              {
-                StatusMessage = "Found " + name;
-
-                if (_rssiOnly)
-                {
-                  _rssi = rssi;
-                }
-                else
-                {
-                  // found a device with the name we want
-                  // this example does not deal with finding more than one
-                  _deviceAddress = address;
-                  SetState(States.Connect, 0.5f);
-                }
-              }
-
-            }, _rssiOnly); // this last setting allows RFduino to send RSSI without having manufacturer data
-
-            if (_rssiOnly)
-              SetState(States.ScanRSSI, 0.5f);
-            break;
-
-          case States.ScanRSSI:
-            break;
-
-          case States.ReadRSSI:
-            StatusMessage = $"Call Read RSSI";
-            BluetoothLEHardwareInterface.ReadRSSI(_deviceAddress, (address, rssi) =>
-            {
-              StatusMessage = $"Read RSSI: {rssi}";
-            });
-
-            SetState(States.ReadRSSI, 2f);
-            break;
-
-          case States.Connect:
-            StatusMessage = "Connecting...";
-
-            // set these flags
-            _foundSensorDataConfigurationCharacteristicUUID = false;
-            _foundSensorDataCharacteristicUUID = false;
-
-            // note that the first parameter is the address, not the name. I have not fixed this because
-            // of backwards compatiblity.
-            // also note that I am note using the first 2 callbacks. If you are not looking for specific characteristics you can use one of
-            // the first 2, but keep in mind that the device will enumerate everything and so you will want to have a timeout
-            // large enough that it will be finished enumerating before you try to subscribe or do any other operations.
-            BluetoothLEHardwareInterface.ConnectToPeripheral(_deviceAddress, null, null, (address, _serviceUUID, characteristicUUID) =>
-            {
-              BluetoothLEHardwareInterface.StopScan();
-
-              if (IsEqual(_serviceUUID, serviceUUID))
-              {
-                StatusMessage = "Found Service UUID";
-
-                _foundSensorDataConfigurationCharacteristicUUID = _foundSensorDataConfigurationCharacteristicUUID || IsEqual(characteristicUUID, sensorDataConfigurationCharacteristicUUID);
-                _foundSensorDataCharacteristicUUID = _foundSensorDataCharacteristicUUID || IsEqual(characteristicUUID, sensorDataCharacteristicUUID);
-
-                // if we have found both characteristics that we are waiting for
-                // set the state. make sure there is enough timeout that if the
-                // device is still enumerating other characteristics it finishes
-                // before we try to subscribe
-                if (!_connected && _foundSensorDataConfigurationCharacteristicUUID && _foundSensorDataCharacteristicUUID)
-                {
-                  _connected = true;
-                  connectionEvents.onConnect.Invoke();
-                  SetState(States.RequestMTU, 2f);
-                }
-              }
-            });
-            break;
-
-          case States.RequestMTU:
-            StatusMessage = "Requesting MTU";
-
-            BluetoothLEHardwareInterface.RequestMtu(_deviceAddress, 185, (address, newMTU) =>
-            {
-              StatusMessage = "MTU set to " + newMTU.ToString();
-
-              SetState(States.Subscribe, 0.1f);
-            });
-            break;
-
-          case States.Subscribe:
-            StatusMessage = "Subscribing to characteristics...";
-
-            BluetoothLEHardwareInterface.SubscribeCharacteristicWithDeviceAddress(_deviceAddress, serviceUUID, sensorDataCharacteristicUUID, (notifyAddress, notifyCharacteristic) =>
-            {
-              _state = States.None;
-
-              // read the initial state of the button
-              BluetoothLEHardwareInterface.ReadCharacteristic(_deviceAddress, serviceUUID, sensorDataCharacteristicUUID, (characteristic, bytes) =>
-              {
-                ProcessSensorData(bytes);
-              });
-
-              SetState(States.ReadRSSI, 1f);
-
-            }, (address, characteristicUUID, bytes) =>
-            {
-              if (_state != States.None)
-              {
-                // some devices do not properly send the notification state change which calls
-                // the lambda just above this one so in those cases we don't have a great way to
-                // set the state other than waiting until we actually got some data back.
-                // The esp32 sends the notification above, but if yuor device doesn't you would have
-                // to send data like pressing the button on the esp32 as the sketch for this demo
-                // would then send data to trigger this.
-                SetState(States.ReadRSSI, 1f);
-              }
-
-              // we received some data from the device
-              ProcessSensorData(bytes);
-            });
-            break;
-
-          case States.Unsubscribe:
-            BluetoothLEHardwareInterface.UnSubscribeCharacteristic(_deviceAddress, serviceUUID, sensorDataCharacteristicUUID, null);
-            SetState(States.Disconnect, 4f);
-            break;
-
-          case States.Disconnect:
-            StatusMessage = "Commanded disconnect.";
-
-            if (_connected)
-            {
-              BluetoothLEHardwareInterface.DisconnectPeripheral(_deviceAddress, (address) =>
-              {
-                StatusMessage = "Device disconnected";
-                BluetoothLEHardwareInterface.DeInitialize(() =>
-                              {
-                                _connected = false;
-                                _state = States.None;
-                                connectionEvents.onDisconnect.Invoke();
-                              });
-              });
-            }
-            else
-            {
-              BluetoothLEHardwareInterface.DeInitialize(() =>
-              {
-                _state = States.None;
-              });
-            }
-            break;
-        }
-      }
     }
   }
 }

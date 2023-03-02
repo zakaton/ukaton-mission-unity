@@ -3,14 +3,14 @@ using UnityEngine;
 using UnityEngine.Events;
 using System.Collections.Generic;
 
-public class UkatonMissions : MonoBehaviour
+public class UkatonMissions
 {
   [Header("Insoles")]
   [SerializeField]
-  private UkatonMission leftMission;
+  private UkatonMissionMonoBehavior leftInsole;
 
   [SerializeField]
-  private UkatonMission rightMission;
+  private UkatonMissionMonoBehavior rightInsole;
 
   public class PressureData
   {
@@ -22,8 +22,8 @@ public class UkatonMissions : MonoBehaviour
 
   void Start()
   {
-    leftMission.pressureDataEvents.pressure.AddListener(updatePressureData);
-    rightMission.pressureDataEvents.pressure.AddListener(updatePressureData);
+    leftInsole.pressureDataEvents.pressure.AddListener(updatePressureData);
+    rightInsole.pressureDataEvents.pressure.AddListener(updatePressureData);
   }
 
   [Serializable]
@@ -38,15 +38,15 @@ public class UkatonMissions : MonoBehaviour
 
   public void updatePressureData()
   {
-    pressureData.sum = leftMission.pressureData.sum + rightMission.pressureData.sum;
+    pressureData.sum = leftInsole.ukatonMission.pressureData.sum + rightInsole.ukatonMission.pressureData.sum;
 
     if (pressureData.sum > 0)
     {
-      pressureData.mass[UkatonMission.InsoleSide.left] = leftMission.pressureData.sum / pressureData.sum;
-      pressureData.mass[UkatonMission.InsoleSide.right] = rightMission.pressureData.sum / pressureData.sum;
+      pressureData.mass[UkatonMission.InsoleSide.left] = leftInsole.ukatonMission.pressureData.sum / pressureData.sum;
+      pressureData.mass[UkatonMission.InsoleSide.right] = rightInsole.ukatonMission.pressureData.sum / pressureData.sum;
 
       pressureData.centerOfMass.x = (float)pressureData.mass[UkatonMission.InsoleSide.right];
-      pressureData.centerOfMass.y = leftMission.pressureData.centerOfMass.y * (float)pressureData.mass[UkatonMission.InsoleSide.left] + rightMission.pressureData.centerOfMass.y * (float)pressureData.mass[UkatonMission.InsoleSide.right];
+      pressureData.centerOfMass.y = leftInsole.ukatonMission.pressureData.centerOfMass.y * (float)pressureData.mass[UkatonMission.InsoleSide.left] + rightInsole.ukatonMission.pressureData.centerOfMass.y * (float)pressureData.mass[UkatonMission.InsoleSide.right];
 
       Debug.Log(pressureData.centerOfMass);
 

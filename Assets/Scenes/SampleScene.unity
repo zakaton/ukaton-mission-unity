@@ -344,7 +344,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 119596454}
-  - component: {fileID: 119596453}
   m_Layer: 0
   m_Name: UkatonMissions
   m_TagString: Untagged
@@ -352,27 +351,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &119596453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119596452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e285143a5e09445c1aead1d4367ea66f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  leftMission: {fileID: 360905863}
-  rightMission: {fileID: 623048119}
-  pressureDataEvents:
-    centerOfMass:
-      m_PersistentCalls:
-        m_Calls: []
-    mass:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!4 &119596454
 Transform:
   m_ObjectHideFlags: 0
@@ -512,7 +490,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 226892788}
-  - component: {fileID: 226892787}
+  - component: {fileID: 226892789}
   m_Layer: 0
   m_Name: UkatonMission
   m_TagString: Untagged
@@ -520,7 +498,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &226892787
+--- !u!4 &226892788
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226892786}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &226892789
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -529,42 +522,161 @@ MonoBehaviour:
   m_GameObject: {fileID: 226892786}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc15a15b34be44701a29eef601d89b25, type: 3}
+  m_Script: {fileID: 11500000, guid: 35f129045483947f39cbd103a3e071cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loggerText: {fileID: 592308499}
-  deviceName: rightShoe
-  autoConnect: 0
-  isInsole: 0
-  insoleSide: 1
-  motionSensorDataRates:
-    acceleration: 0
-    gravity: 0
-    linearAcceleration: 0
-    rotation: 0
-    magnetometer: 0
-    quaternion: 10
-  pressureSensorDataRates:
-    singleByte: 10
-    doubleByte: 0
-    centerOfMass: 0
-    mass: 0
-    heelToToe: 0
-  enableLogging: 0
-  connectionEvents:
-    onConnect:
-      m_PersistentCalls:
-        m_Calls: []
-    onConnecting:
-      m_PersistentCalls:
-        m_Calls: []
-    onDisconnect:
-      m_PersistentCalls:
-        m_Calls: []
+  connectionType: 0
+  ukatonMissionBLE:
+    loggerText: {fileID: 0}
+    IsConnected: 0
+    IsConnecting: 0
+    deviceName: mission11
+    autoConnect: 0
+    isInsole: 0
+    insoleSide: 0
+    motionSensorDataRates:
+      acceleration: 0
+      gravity: 0
+      linearAcceleration: 0
+      rotation: 0
+      magnetometer: 0
+      quaternion: 0
+    pressureSensorDataRates:
+      singleByte: 0
+      doubleByte: 0
+      centerOfMass: 0
+      mass: 0
+      heelToToe: 0
+    enableLogging: 1
+    connectionEvents:
+      onConnect:
+        m_PersistentCalls:
+          m_Calls: []
+      onConnecting:
+        m_PersistentCalls:
+          m_Calls: []
+      onStopConnecting:
+        m_PersistentCalls:
+          m_Calls: []
+      onDisconnect:
+        m_PersistentCalls:
+          m_Calls: []
+    motionDataEvents:
+      <acceleration>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <gravity>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <linearAcceleration>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <rotation>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <magnetometer>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <quaternion>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+    pressureDataEvents:
+      pressure:
+        m_PersistentCalls:
+          m_Calls: []
+      centerOfMass:
+        m_PersistentCalls:
+          m_Calls: []
+      mass:
+        m_PersistentCalls:
+          m_Calls: []
+      heelToToe:
+        m_PersistentCalls:
+          m_Calls: []
+  ukatonMissionUDP:
+    loggerText: {fileID: 0}
+    IsConnected: 0
+    IsConnecting: 0
+    deviceName: mission11
+    autoConnect: 0
+    isInsole: 0
+    insoleSide: 0
+    motionSensorDataRates:
+      acceleration: 0
+      gravity: 0
+      linearAcceleration: 0
+      rotation: 0
+      magnetometer: 0
+      quaternion: 0
+    pressureSensorDataRates:
+      singleByte: 0
+      doubleByte: 0
+      centerOfMass: 0
+      mass: 0
+      heelToToe: 0
+    enableLogging: 1
+    connectionEvents:
+      onConnect:
+        m_PersistentCalls:
+          m_Calls: []
+      onConnecting:
+        m_PersistentCalls:
+          m_Calls: []
+      onStopConnecting:
+        m_PersistentCalls:
+          m_Calls: []
+      onDisconnect:
+        m_PersistentCalls:
+          m_Calls: []
+    motionDataEvents:
+      <acceleration>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <gravity>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <linearAcceleration>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <rotation>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <magnetometer>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+      <quaternion>k__BackingField:
+        m_PersistentCalls:
+          m_Calls: []
+    pressureDataEvents:
+      pressure:
+        m_PersistentCalls:
+          m_Calls: []
+      centerOfMass:
+        m_PersistentCalls:
+          m_Calls: []
+      mass:
+        m_PersistentCalls:
+          m_Calls: []
+      heelToToe:
+        m_PersistentCalls:
+          m_Calls: []
+    address: 192.168.4.70
   motionDataEvents:
     <acceleration>k__BackingField:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: 
+          m_MethodName: 
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     <gravity>k__BackingField:
       m_PersistentCalls:
         m_Calls: []
@@ -593,21 +705,19 @@ MonoBehaviour:
     heelToToe:
       m_PersistentCalls:
         m_Calls: []
---- !u!4 &226892788
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 226892786}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  motionSensorDataRates:
+    acceleration: 0
+    gravity: 0
+    linearAcceleration: 0
+    rotation: 0
+    magnetometer: 0
+    quaternion: 0
+  pressureSensorDataRates:
+    singleByte: 0
+    doubleByte: 0
+    centerOfMass: 0
+    mass: 0
+    heelToToe: 0
 --- !u!1 &267188017
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,7 +841,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 360905864}
-  - component: {fileID: 360905863}
   m_Layer: 0
   m_Name: LeftUkatonMission
   m_TagString: Untagged
@@ -739,91 +848,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &360905863
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 360905862}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc15a15b34be44701a29eef601d89b25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loggerText: {fileID: 0}
-  deviceName: leftFoot
-  autoConnect: 0
-  isInsole: 1
-  insoleSide: 0
-  motionSensorDataRates:
-    acceleration: 0
-    gravity: 0
-    linearAcceleration: 0
-    rotation: 0
-    magnetometer: 0
-    quaternion: 0
-  pressureSensorDataRates:
-    singleByte: 100
-    doubleByte: 0
-    centerOfMass: 0
-    mass: 0
-    heelToToe: 0
-  enableLogging: 1
-  connectionEvents:
-    onConnect:
-      m_PersistentCalls:
-        m_Calls: []
-    onConnecting:
-      m_PersistentCalls:
-        m_Calls: []
-    onDisconnect:
-      m_PersistentCalls:
-        m_Calls: []
-  motionDataEvents:
-    <acceleration>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <gravity>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <linearAcceleration>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <rotation>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <magnetometer>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <quaternion>k__BackingField:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UkatonMissionListener, Assembly-CSharp
-          m_MethodName: onQuaternionUpdate
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  pressureDataEvents:
-    pressure:
-      m_PersistentCalls:
-        m_Calls: []
-    centerOfMass:
-      m_PersistentCalls:
-        m_Calls: []
-    mass:
-      m_PersistentCalls:
-        m_Calls: []
-    heelToToe:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!4 &360905864
 Transform:
   m_ObjectHideFlags: 0
@@ -982,7 +1006,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8eff29202975499abc4b386671f16c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ukatonMission: {fileID: 226892787}
+  ukatonMissionMonoBehavior: {fileID: 0}
+  resetYaw: 0
+  yawOffset: 0
 --- !u!1 &592308497
 GameObject:
   m_ObjectHideFlags: 0
@@ -1196,7 +1222,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 623048120}
-  - component: {fileID: 623048119}
   m_Layer: 0
   m_Name: RightUkatonMission
   m_TagString: Untagged
@@ -1204,91 +1229,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &623048119
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 623048118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc15a15b34be44701a29eef601d89b25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  loggerText: {fileID: 0}
-  deviceName: rightFoot
-  autoConnect: 0
-  isInsole: 1
-  insoleSide: 1
-  motionSensorDataRates:
-    acceleration: 0
-    gravity: 0
-    linearAcceleration: 0
-    rotation: 0
-    magnetometer: 0
-    quaternion: 0
-  pressureSensorDataRates:
-    singleByte: 100
-    doubleByte: 0
-    centerOfMass: 0
-    mass: 0
-    heelToToe: 0
-  enableLogging: 1
-  connectionEvents:
-    onConnect:
-      m_PersistentCalls:
-        m_Calls: []
-    onConnecting:
-      m_PersistentCalls:
-        m_Calls: []
-    onDisconnect:
-      m_PersistentCalls:
-        m_Calls: []
-  motionDataEvents:
-    <acceleration>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <gravity>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <linearAcceleration>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <rotation>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <magnetometer>k__BackingField:
-      m_PersistentCalls:
-        m_Calls: []
-    <quaternion>k__BackingField:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UkatonMissionListener, Assembly-CSharp
-          m_MethodName: onQuaternionUpdate
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  pressureDataEvents:
-    pressure:
-      m_PersistentCalls:
-        m_Calls: []
-    centerOfMass:
-      m_PersistentCalls:
-        m_Calls: []
-    mass:
-      m_PersistentCalls:
-        m_Calls: []
-    heelToToe:
-      m_PersistentCalls:
-        m_Calls: []
 --- !u!4 &623048120
 Transform:
   m_ObjectHideFlags: 0
@@ -1770,7 +1710,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &881407706
 Transform:
   m_ObjectHideFlags: 0
@@ -1786,7 +1726,7 @@ Transform:
   - {fileID: 1217698713}
   - {fileID: 1844571743}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &891294451
 PrefabInstance:
@@ -2044,7 +1984,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 933396494}
-  - component: {fileID: 933396495}
   m_Layer: 0
   m_Name: rightInsole
   m_TagString: Untagged
@@ -2069,19 +2008,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
---- !u!114 &933396495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 933396493}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9a5ca52996474652b853dd872a78053, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ukatonMission: {fileID: 226892787}
 --- !u!1001 &960318041
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3093,116 +3019,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1615207288}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &1628765113
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1628765114}
-  - component: {fileID: 1628765115}
-  m_Layer: 0
-  m_Name: UkatonMissionUDP
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1628765114
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1628765113}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.04754497, y: 0.54745764, z: -0.25373268}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 9
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1628765115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1628765113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc8e53ee7e3ab4f8eb7c936e4520b0ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  address: 192.168.4.70
-  ukatonMission:
-    loggerText: {fileID: 0}
-    deviceName: leftBicep
-    autoConnect: 1
-    isInsole: 0
-    insoleSide: 0
-    motionSensorDataRates:
-      acceleration: 0
-      gravity: 0
-      linearAcceleration: 0
-      rotation: 0
-      magnetometer: 0
-      quaternion: 20
-    pressureSensorDataRates:
-      singleByte: 0
-      doubleByte: 0
-      centerOfMass: 0
-      mass: 0
-      heelToToe: 0
-    enableLogging: 1
-    connectionEvents:
-      onConnect:
-        m_PersistentCalls:
-          m_Calls: []
-      onConnecting:
-        m_PersistentCalls:
-          m_Calls: []
-      onStopConnecting:
-        m_PersistentCalls:
-          m_Calls: []
-      onDisconnect:
-        m_PersistentCalls:
-          m_Calls: []
-    motionDataEvents:
-      <acceleration>k__BackingField:
-        m_PersistentCalls:
-          m_Calls: []
-      <gravity>k__BackingField:
-        m_PersistentCalls:
-          m_Calls: []
-      <linearAcceleration>k__BackingField:
-        m_PersistentCalls:
-          m_Calls: []
-      <rotation>k__BackingField:
-        m_PersistentCalls:
-          m_Calls: []
-      <magnetometer>k__BackingField:
-        m_PersistentCalls:
-          m_Calls: []
-      <quaternion>k__BackingField:
-        m_PersistentCalls:
-          m_Calls: []
-    pressureDataEvents:
-      pressure:
-        m_PersistentCalls:
-          m_Calls: []
-      centerOfMass:
-        m_PersistentCalls:
-          m_Calls: []
-      mass:
-        m_PersistentCalls:
-          m_Calls: []
-      heelToToe:
-        m_PersistentCalls:
-          m_Calls: []
 --- !u!1 &1662067937
 GameObject:
   m_ObjectHideFlags: 0
@@ -3505,7 +3321,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1767942082}
-  - component: {fileID: 1767942083}
   m_Layer: 0
   m_Name: a-frame
   m_TagString: Untagged
@@ -3532,21 +3347,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1767942083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1767942081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b338062b8a37f43bc95874d1f470bf46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ukatonMissionUDP: {fileID: 1628765115}
-  resetYaw: 0
-  yawOffset: 0
 --- !u!1 &1794107808
 GameObject:
   m_ObjectHideFlags: 0
@@ -3686,7 +3486,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1844571743}
-  - component: {fileID: 1844571744}
   m_Layer: 0
   m_Name: platform
   m_TagString: Untagged
@@ -3714,21 +3513,6 @@ Transform:
   m_Father: {fileID: 881407706}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1844571744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1844571742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b338062b8a37f43bc95874d1f470bf46, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ukatonMissionUDP: {fileID: 1628765115}
-  resetYaw: 0
-  yawOffset: 0
 --- !u!1 &1876440078
 GameObject:
   m_ObjectHideFlags: 0

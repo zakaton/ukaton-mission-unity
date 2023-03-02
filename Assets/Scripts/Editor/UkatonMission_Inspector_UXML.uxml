@@ -1,18 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
     <ui:Label text="Device Information" display-tooltip-when-elided="true" style="-unity-font-style: bold;" />
-    <ui:TextField picking-mode="Ignore" label="name" binding-path="deviceName" />
-    <ui:Toggle label="auto connect?" binding-path="autoConnect" />
-    <ui:Toggle label="Is Insole?" binding-path="isInsole" />
-    <uie:EnumField label="insole side" value="Center" binding-path="insoleSide" name="insoleSideElement" />
+    <ui:TextField picking-mode="Ignore" label="name" binding-path="ukatonMissionBLE.deviceName" />
+    <ui:Toggle label="auto connect?" binding-path="ukatonMission.autoConnect" />
+    <ui:Toggle label="Is Insole?" binding-path="ukatonMission.isInsole" />
+    <uie:EnumField label="insole side" value="Center" binding-path="ukatonMission.insoleSide" name="insoleSideElement" />
     <ui:Button text="connect" display-tooltip-when-elided="true" name="connectButton" />
     <ui:Label text="Sensor Data Configuration" display-tooltip-when-elided="true" style="border-bottom-width: 0; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); padding-top: 8px; -unity-font-style: bold;" />
-    <uie:PropertyField binding-path="motionSensorDataRates" label="Motion Data Rates (ms)" />
-    <uie:PropertyField binding-path="pressureSensorDataRates" label="Pressure Data Rates (ms)" name="pressureDataRatesElement" />
+    <uie:PropertyField binding-path="ukatonMission.motionSensorDataRates" label="Motion Data Rates (ms)" />
+    <uie:PropertyField binding-path="ukatonMission.pressureSensorDataRates" label="Pressure Data Rates (ms)" name="pressureDataRatesElement" />
     <ui:Label text="Events" display-tooltip-when-elided="true" style="-unity-font-style: bold; padding-top: 10px;" />
-    <uie:PropertyField binding-path="connectionEvents" label="Connection" />
-    <uie:PropertyField binding-path="motionDataEvents" label="Motion Data" />
-    <uie:PropertyField binding-path="pressureDataEvents" label="Pressure Data" name="pressureDataEventsElement" />
+    <uie:PropertyField binding-path="ukatonMission.connectionEvents" label="Connection" />
+    <uie:PropertyField binding-path="ukatonMission.motionDataEvents" label="Motion Data" />
+    <uie:PropertyField binding-path="ukatonMission.pressureDataEvents" label="Pressure Data" name="pressureDataEventsElement" />
     <ui:Label text="Debugging" display-tooltip-when-elided="true" style="-unity-font-style: bold; padding-top: 10px;" />
-    <ui:Toggle label="Enable Logging? " binding-path="enableLogging" />
-    <uie:PropertyField label="loggerText" binding-path="loggerText" />
+    <ui:Toggle label="Enable Logging? " binding-path="ukatonMission.enableLogging" />
+    <uie:PropertyField label="loggerText" binding-path="ukatonMission.loggerText" />
 </ui:UXML>

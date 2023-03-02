@@ -2,15 +2,14 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class UkatonMissionUDP : MonoBehaviour
+[Serializable]
+public class UkatonMissionUDP : UkatonMission
 {
   [SerializeField]
-  private string address = "0.0.0.0";
+  public string address = "0.0.0.0";
 
-  private UdpConnection connection;
+  public UdpConnection connection;
 
-  [SerializeField]
-  public UkatonMissionBaseClass ukatonMission = new();
   enum MessageType
   {
     PING,
@@ -34,28 +33,37 @@ public class UkatonMissionUDP : MonoBehaviour
   private float LastPingTime = 0;
   private float LastTimeReceivedData = 0;
 
-  void Start()
-  {
-    ukatonMission.Start();
-    ukatonMission.connectionEvents.onConnect.AddListener(OnConnect);
+  private bool shouldConnect = false;
 
+  public override void Start()
+  {
+    base.Start();
     connection = new UdpConnection();
     connection.StartConnection(address, 9999, 11000);
+    if (autoConnect)
+    {
+      Connect();
+    }
   }
 
-
-  void OnApplicationQuit()
+  public override void Connect()
   {
-    connection.Stop();
+    IsConnecting = true;
+    shouldConnect = true;
+    connectionEvents.onConnecting.Invoke();
   }
 
-  void OnDestroy()
+  public override void Disconnect()
   {
-    connection.Stop();
+    shouldConnect = false;
+    IsConnected = false;
+    LastTimeReceivedData = 0;
   }
 
-  void Update()
+  public override void Update()
   {
+    CheckUpdateSensorDataConfiguration();
+
     var messages = connection.getMessages();
     if (messages.Length > 0)
     {
@@ -65,25 +73,32 @@ public class UkatonMissionUDP : MonoBehaviour
       }
       if (LastTimeReceivedData == 0)
       {
-        ukatonMission.connectionEvents.onConnect.Invoke();
+        OnConnect();
       }
       LastTimeReceivedData = Time.time;
     }
 
-    if (Time.time - LastPingTime > 1)
+    if (shouldConnect && Time.time - LastPingTime > 1)
     {
-      Ping();
+      if (LastTimeReceivedData > 0 && Time.time - LastTimeReceivedData > 5)
+      {
+        _UpdateSensorDataConfiguration();
+      }
+      else
+      {
+        Ping();
+      }
     }
   }
 
-  void ProcessData(byte[] bytes)
+  public void ProcessData(byte[] bytes)
   {
     var messageType = (MessageType)bytes[0];
     switch (messageType)
     {
       case MessageType.SENSOR_DATA:
         var segment = new ArraySegment<byte>(bytes, 1, bytes.Length - 1).ToArray();
-        ukatonMission.ProcessSensorData(segment);
+        ProcessSensorData(segment);
         break;
       case MessageType.BATTERY_LEVEL:
         //var batteryLevel = bytes[1];
@@ -95,22 +110,28 @@ public class UkatonMissionUDP : MonoBehaviour
     }
   }
 
-  void Ping()
+  public void Ping()
   {
-    var bytes = new byte[] { (byte)MessageType.PING };
+    var bytes = new byte[] { (byte)(IsConnected ? MessageType.PING : MessageType.GET_NAME) };
     connection.Send(bytes);
-    ukatonMission.logger.Log("PING");
+    logger.Log("PING");
     LastPingTime = Time.time;
   }
 
   void OnConnect()
   {
-    ukatonMission.logger.Log("CONNECTED!");
-    var bytesList = ukatonMission.CreateSensorConfiguration();
+    IsConnected = true;
+    IsConnecting = false;
+    connectionEvents.onConnect.Invoke();
+  }
+
+  public override void _UpdateSensorDataConfiguration()
+  {
+    var bytesList = CreateSensorConfiguration();
     bytesList.Insert(0, (byte)bytesList.Count());
     bytesList.Insert(0, (byte)MessageType.SET_SENSOR_DATA_CONFIGURATIONS);
     var bytesArray = bytesList.ToArray();
-    //Debug.Log(string.Join(", ", bytesArray));
+    Debug.Log(string.Join(", ", bytesArray));
     connection.Send(bytesArray);
     LastPingTime = Time.time;
   }

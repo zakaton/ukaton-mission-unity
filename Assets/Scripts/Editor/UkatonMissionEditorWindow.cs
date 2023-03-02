@@ -3,16 +3,9 @@ using UnityEditor;
 using System.Collections.Generic;
 using System;
 
-/*
-  TODO
-    enable/disable quaternion
-    rotate camera
-    rotate selected objects
-*/
-
 public class UkatonMissionEditorWindow : EditorWindow
 {
-  private UkatonMissionBaseClass ukatonMission = new();
+  private UkatonMissionUDP ukatonMission = new();
 
   private int[] selectionIDs;
   private List<int> idsToOrbit = new();
@@ -86,13 +79,13 @@ public class UkatonMissionEditorWindow : EditorWindow
 
   void enableQuaternion()
   {
-    ukatonMission.motionSensorDataRates.quaternion = UkatonMissionBaseClass.SensorDataRate._10;
-    ukatonMission.updateSensorDataConfiguration();
+    ukatonMission.motionSensorDataRates.quaternion = UkatonMission.SensorDataRate._10;
+    ukatonMission.UpdateSensorDataConfiguration();
   }
   void disableQuaternion()
   {
-    ukatonMission.motionSensorDataRates.quaternion = UkatonMissionBaseClass.SensorDataRate._0;
-    ukatonMission.updateSensorDataConfiguration();
+    ukatonMission.motionSensorDataRates.quaternion = UkatonMission.SensorDataRate._0;
+    ukatonMission.UpdateSensorDataConfiguration();
   }
 
   void onQuaternion()
